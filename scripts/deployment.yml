@@ -1,1 +1,36 @@
 # Write Kubernetes Deployment Script
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book1
+  template:
+    metadata:
+      labels:
+        app: book1
+    spec:
+      containers: 
+      - name: video-streaming
+        image: task:2
+        imagePullPolicy: Never
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://task_639y_user:Si6Oxma8Sh2R1FqEmEfjh8Y7mTtwiR5C@dpg-crfufcij1k6c7398uuug-a.oregon-postgres.render.com/task_639y"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book1
+spec:
+  selector:
+    app: book1
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+      nodePort: 30000
